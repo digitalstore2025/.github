@@ -358,7 +358,7 @@
       lang: 'ar',
       type: 'bulletin',
       cadence: '1',
-      sources: new Set(['newsroom', 'rss']),
+      sources: new Set(['newsroom']),
     };
 
     const strings = {
@@ -465,7 +465,7 @@
       a.href = url;
       a.download = 'voice-of-quds-config.json';
       a.click();
-      URL.revokeObjectURL(url);
+      setTimeout(() => URL.revokeObjectURL(url), 100);
       document.getElementById('copy-status').textContent = strings[state.lang].exported;
     });
 
