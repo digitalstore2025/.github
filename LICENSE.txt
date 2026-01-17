@@ -1,0 +1,209 @@
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  DIGITAL HEALTH PRODUCT TEMPLATE LICENSE
+  رخصة قالب المنتج الرقمي الصحي
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Version 1.0 - 2025
+Copyright © 2025 Digital Store 2025
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  النسخة العربية | ARABIC VERSION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+هذا القالب مُرخّص للاستخدام الشخصي والتجاري تحت الشروط التالية:
+
+✅ الاستخدامات المسموحة:
+━━━━━━━━━━━━━━━━━━━━━━
+
+1. استخدام شخصي غير محدود
+   - يمكنك استخدام القالب لمشاريعك الشخصية
+   - لا حدود على عدد المشاريع
+
+2. استخدام تجاري
+   - يمكنك استخدام القالب لبيع منتجاتك الرقمية
+   - يمكنك تحصيل أموال من العملاء
+   - لا حدود على الأرباح
+
+3. التعديل والتخصيص
+   - يمكنك تعديل الكود بالكامل
+   - يمكنك تغيير التصميم والألوان
+   - يمكنك إضافة/حذف أي ميزات
+
+4. استخدام للعملاء
+   - يمكنك استخدامه في مشاريع العملاء
+   - يمكنك تقديمه كخدمة
+
+5. الاستضافة
+   - يمكنك رفعه على أي منصة (Replit, Netlify, Vercel, إلخ)
+   - استضافة غير محدودة
+
+❌ الاستخدامات الممنوعة:
+━━━━━━━━━━━━━━━━━━━━━━
+
+1. إعادة البيع كقالب
+   - ممنوع بيع القالب نفسه لأشخاص آخرين كقالب
+   - ممنوع توزيعه كمنتج منفصل
+
+2. ادعاء الملكية
+   - ممنوع ادعاء أنك المطور الأصلي
+   - ممنوع إزالة أي إشارات للمطور الأصلي (إن وجدت)
+
+3. الاستخدامات غير القانونية
+   - ممنوع استخدامه في أي نشاط غير قانوني
+   - ممنوع استخدامه للاحتيال أو الخداع
+   - ممنوع استخدامه للترويج لمنتجات طبية غير مصرّحة
+
+4. المنافسة المباشرة
+   - ممنوع بيعه كقالب منافس
+   - ممنوع إنشاء نسخ طبق الأصل للبيع كقوالب
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  الشروط الإضافية
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+⚠️ إخلاء المسؤولية:
+
+1. القالب مقدم "كما هو" بدون أي ضمانات
+2. المطور الأصلي غير مسؤول عن:
+   - أي أضرار ناتجة عن استخدام القالب
+   - أي مشاكل تقنية
+   - خسائر مالية أو تجارية
+   - انتهاك القوانين المحلية
+
+3. المستخدم مسؤول عن:
+   - التأكد من توافق المحتوى مع القوانين المحلية
+   - التأكد من صحة المعلومات الطبية (إن وجدت)
+   - الامتثال لقوانين حماية المستهلك
+   - أمان بيانات العملاء
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  تنويه صحي مهم
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+إذا كنت تستخدم هذا القالب لبيع منتجات صحية:
+
+1. لا تقدم نصائح طبية بدون ترخيص
+2. اذكر دائمًا: "هذا المنتج للأغراض التثقيفية ولا يغني عن استشارة الطبيب"
+3. لا تدعي علاج أمراض بدون دليل علمي
+4. التزم بقوانين بلدك بخصوص المنتجات الصحية
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  التحديثات والدعم
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✓ التحديثات المستقبلية مجانية للمستخدمين الحاليين
+✓ الدعم الفني متاح عبر البريد الإلكتروني
+✓ إصلاح الأخطاء (Bugs) مجاني
+✓ الميزات الجديدة قد تكون مجانية أو مدفوعة
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  الاتصال
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+للأسئلة حول الرخصة أو الاستخدام:
+Email: support@yourdomain.com
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ENGLISH VERSION | النسخة الإنجليزية
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+This template is licensed for personal and commercial use under the
+following terms:
+
+✅ PERMITTED USES:
+━━━━━━━━━━━━━━━━
+
+1. Personal Use
+   - Use for your personal projects
+   - No limits on number of projects
+
+2. Commercial Use
+   - Sell your digital products using this template
+   - Charge customers for your products
+   - No profit limits
+
+3. Modification
+   - Modify the code completely
+   - Change design and colors
+   - Add/remove any features
+
+4. Client Work
+   - Use in client projects
+   - Offer as a service
+
+5. Hosting
+   - Host on any platform (Replit, Netlify, Vercel, etc.)
+   - Unlimited hosting
+
+❌ PROHIBITED USES:
+━━━━━━━━━━━━━━━━
+
+1. Resale as Template
+   - Cannot sell the template itself to others
+   - Cannot distribute as a separate product
+
+2. Claiming Ownership
+   - Cannot claim to be the original developer
+   - Cannot remove attribution (if present)
+
+3. Illegal Activities
+   - Cannot use for illegal activities
+   - Cannot use for fraud or deception
+   - Cannot promote unauthorized medical products
+
+4. Direct Competition
+   - Cannot sell as competing template
+   - Cannot create exact copies for sale as templates
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  WARRANTY DISCLAIMER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+THE TEMPLATE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE TEMPLATE OR THE USE OR
+OTHER DEALINGS IN THE TEMPLATE.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  HEALTH PRODUCT DISCLAIMER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+If using this template for health products:
+
+1. Do not provide medical advice without proper licensing
+2. Always include: "This product is for educational purposes only
+   and does not replace professional medical advice"
+3. Do not claim to cure diseases without scientific evidence
+4. Comply with your country's laws regarding health products
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  UPDATES & SUPPORT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✓ Future updates are free for current users
+✓ Technical support available via email
+✓ Bug fixes are free
+✓ New features may be free or paid
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  CONTACT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+For questions about licensing or usage:
+Email: support@yourdomain.com
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+© 2025 Digital Store 2025. All Rights Reserved.
+
+Last Updated: January 2025
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

@@ -1,0 +1,10 @@
+run = "python3 -m http.server 8080"
+language = "html"
+entrypoint = "index.html"
+
+[nix]
+channel = "stable-21_11"
+
+[deployment]
+run = ["sh", "-c", "python3 -m http.server 8080"]
+deploymentTarget = "cloudrun"
