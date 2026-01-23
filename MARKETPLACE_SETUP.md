@@ -69,7 +69,7 @@ app/
 
 ### app/layout.jsx
 ```jsx
-import { AuthProvider } from "../context/AuthContext";
+import { AuthProvider } from "./context/AuthContext";
 import "./globals.css";
 
 export const metadata = {
