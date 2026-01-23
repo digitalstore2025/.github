@@ -189,7 +189,7 @@
       }
 
       .radio-option input {
-        margin-left: 8px;
+        margin-right: 8px;
         cursor: pointer;
       }
 
@@ -199,7 +199,7 @@
         border-radius: 4px;
         font-size: 11px;
         font-weight: 600;
-        margin-right: 6px;
+        margin-left: 6px;
       }
 
       .badge.reliable {
@@ -242,7 +242,7 @@
       }
 
       .news-item input[type="checkbox"] {
-        margin-left: 12px;
+        margin-right: 12px;
         cursor: pointer;
       }
 
@@ -450,6 +450,10 @@
       @keyframes spin {
         to { transform: rotate(360deg); }
       }
+
+      .review-actions {
+        margin-top: 12px;
+      }
     </style>
   </head>
   <body>
@@ -644,7 +648,7 @@
         </div>
         <label class="control-label">ملاحظات المراجع</label>
         <textarea class="review-notes" placeholder="أضف ملاحظاتك التحريرية هنا..."></textarea>
-        <div style="margin-top: 12px;">
+        <div class="review-actions">
           <button class="btn btn-primary">✓ وضع علامة 'مراجَع'</button>
         </div>
       </section>
