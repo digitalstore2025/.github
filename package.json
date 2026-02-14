@@ -1,0 +1,18 @@
+{
+  "name": "quds-radio-ai",
+  "private": true,
+  "version": "1.0.0",
+  "workspaces": [
+    "apps/*",
+    "services/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm run build -ws --if-present",
+    "typecheck": "npm run typecheck -ws --if-present",
+    "lint": "npm run lint -ws --if-present"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

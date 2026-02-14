@@ -1,0 +1,29 @@
+{
+  "name": "@quds/api",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/index.js",
+    "dev": "tsx watch src/index.ts",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.654.0",
+    "@quds/shared": "1.0.0",
+    "bullmq": "^5.16.0",
+    "dotenv": "^16.4.5",
+    "fastify": "^4.28.1",
+    "ioredis": "^5.4.1",
+    "openai": "^4.66.1",
+    "pg": "^8.13.0",
+    "pino": "^9.4.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^22.7.4",
+    "tsx": "^4.19.1",
+    "typescript": "^5.6.2"
+  }
+}
