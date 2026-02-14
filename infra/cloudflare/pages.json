@@ -1,0 +1,9 @@
+{
+  "buildCommand": "npm ci && npm run build --workspace @quds/web",
+  "outputDirectory": "apps/web/.next",
+  "nodeCompat": true,
+  "framework": "next",
+  "env": {
+    "NEXT_PUBLIC_API_BASE_URL": "https://api.qudsradio.ai"
+  }
+}
