@@ -1,0 +1,41 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0b1221;
+  color: #f3f4f6;
+}
+.container {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+textarea {
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid #374151;
+  background: #111827;
+  color: #f9fafb;
+  padding: 0.75rem;
+}
+.actions {
+  display: flex;
+  gap: 0.5rem;
+  margin: 1rem 0;
+  flex-wrap: wrap;
+}
+button {
+  border: none;
+  border-radius: 6px;
+  background: #2563eb;
+  color: white;
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+}
+pre {
+  background: #111827;
+  border: 1px solid #374151;
+  border-radius: 8px;
+  padding: 1rem;
+  min-height: 200px;
+  white-space: pre-wrap;
+}
