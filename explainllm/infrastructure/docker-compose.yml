@@ -1,0 +1,64 @@
+version: '3.9'
+
+services:
+  api:
+    build:
+      context: ..
+      dockerfile: infrastructure/Dockerfile
+    container_name: explainllm-api
+    ports:
+      - "8000:8000"
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/explainllm
+    depends_on:
+      - redis
+      - postgres
+
+  worker:
+    build:
+      context: ..
+      dockerfile: infrastructure/Dockerfile
+    container_name: explainllm-worker
+    command: celery -A workers.worker.celery_app worker --loglevel=info
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/explainllm
+    depends_on:
+      - redis
+      - postgres
+
+  frontend:
+    image: node:20-alpine
+    container_name: explainllm-frontend
+    working_dir: /app
+    volumes:
+      - ../frontend:/app
+    command: sh -c "npm install && npm run dev"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+
+  redis:
+    image: redis:7-alpine
+    container_name: explainllm-redis
+    ports:
+      - "6379:6379"
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: explainllm-postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=explainllm
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
