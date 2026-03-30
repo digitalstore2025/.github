@@ -1,0 +1,36 @@
+plugins {
+    id 'org.jetbrains.intellij' version '1.13.2' apply false
+    id 'java'
+}
+
+def enableIntelliJPlugin = !project.hasProperty("skipIntellijPlugin")
+
+group 'com.arabic.commit'
+version '1.0'
+
+repositories {
+    mavenCentral()
+}
+
+if (enableIntelliJPlugin) {
+    apply plugin: 'org.jetbrains.intellij'
+
+    intellij {
+        version = '2022.2'
+        pluginName = 'Arabic Conventional Commit Plugin'
+    }
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
