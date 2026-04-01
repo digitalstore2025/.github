@@ -6,3 +6,5 @@ coverage
 .env.*
 *.log
 .DS_Store
+arabic-conventional-commit/.gradle
+arabic-conventional-commit/build

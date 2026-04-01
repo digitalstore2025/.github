@@ -1,0 +1,11 @@
+<idea-plugin>
+    <id>com.arabic.commit</id>
+    <name>Arabic Conventional Commit Plugin</name>
+    <version>1.0</version>
+    <vendor email="support@example.com">Arabic Conventional Commit</vendor>
+    <idea-version since-build="222" />
+    <description><![CDATA[
+      إضافة للتحقق من رسائل الالتزام وفق قواعد Conventional Commit باللغة العربية.
+    ]]></description>
+    <depends>com.intellij.modules.platform</depends>
+</idea-plugin>
