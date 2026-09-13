@@ -1,0 +1,29 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:best-practices"],
+  "dependencyDashboard": true,
+  "labels": ["dependencies", "security-maintenance"],
+  "minimumReleaseAge": "3 days",
+  "prConcurrentLimit": 5,
+  "packageRules": [
+    {
+      "description": "Group routine non-major development dependencies",
+      "matchDepTypes": ["devDependencies"],
+      "matchUpdateTypes": ["patch", "minor"],
+      "groupName": "routine dev dependencies",
+      "automerge": false
+    },
+    {
+      "description": "Security updates remain isolated and require review",
+      "matchCategories": ["security"],
+      "groupName": null,
+      "automerge": false,
+      "minimumReleaseAge": null
+    },
+    {
+      "description": "Never automerge major updates",
+      "matchUpdateTypes": ["major"],
+      "automerge": false
+    }
+  ]
+}

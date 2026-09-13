@@ -1,0 +1,24 @@
+name: Security Gate
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '17 3 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+
+jobs:
+  security:
+    uses: digitalstore2025/.github/.github/workflows/security-gate.yml@5b577b1078c9f1f8bd368d0cbaabd84f84c5d59c
+    with:
+      content_scan_path: .
+      semgrep_config: auto
+      trivy_severity: HIGH,CRITICAL
+      upload_sarif: true
+      generate_sbom: true

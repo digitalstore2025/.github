@@ -1,0 +1,20 @@
+name: ZAP Staging
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_url:
+        description: Explicitly authorized staging URL, for example https://staging.example.com
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  zap:
+    uses: digitalstore2025/.github/.github/workflows/zap-baseline-reusable.yml@5b577b1078c9f1f8bd368d0cbaabd84f84c5d59c
+    with:
+      target_url: ${{ inputs.target_url }}
+      allow_http: false
+      rules_file: .zap/rules.tsv
