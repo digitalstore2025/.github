@@ -3,11 +3,11 @@ name: Reusable CodeQL
 on:
   workflow_call:
     inputs:
-      languages_json:
-        description: JSON array of CodeQL languages, for example ["javascript-typescript","python"].
+      matrix_json:
+        description: JSON array of CodeQL language/build-mode objects. Use none or autobuild; repositories needing a manual build should own a custom CodeQL workflow.
         required: false
         type: string
-        default: '["javascript-typescript"]'
+        default: '[{"language":"javascript-typescript","build_mode":"none"}]'
       queries:
         description: CodeQL query suite.
         required: false
@@ -28,14 +28,25 @@ env:
 
 jobs:
   analyze:
-    name: CodeQL / ${{ matrix.language }}
+    name: CodeQL / ${{ matrix.language }} / ${{ matrix.build_mode }}
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
     strategy:
       fail-fast: false
       matrix:
-        language: ${{ fromJSON(inputs.languages_json) }}
+        include: ${{ fromJSON(inputs.matrix_json) }}
     steps:
+      - name: Validate CodeQL matrix entry
+        shell: bash
+        env:
+          LANGUAGE: ${{ matrix.language }}
+          BUILD_MODE: ${{ matrix.build_mode }}
+        run: |
+          set -euo pipefail
+          case "$BUILD_MODE" in
+            none|autobuild) ;;
+            *) echo "Unsupported build_mode '$BUILD_MODE' for $LANGUAGE. Use none/autobuild or a repository-owned manual-build workflow." >&2; exit 2 ;;
+          esac
       - name: Checkout
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
@@ -45,7 +56,10 @@ jobs:
         with:
           languages: ${{ matrix.language }}
           queries: ${{ inputs.queries }}
-          build-mode: none
+          build-mode: ${{ matrix.build_mode }}
+      - name: Autobuild compiled language
+        if: ${{ matrix.build_mode == 'autobuild' }}
+        uses: github/codeql-action/autobuild@b96794f015dfd88f77b49b1c93e0fa7110f94c63 # v4
       - name: Analyze
         uses: github/codeql-action/analyze@b96794f015dfd88f77b49b1c93e0fa7110f94c63 # v4
         with:

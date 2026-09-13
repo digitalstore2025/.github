@@ -3,8 +3,8 @@ name: Reusable Security Gate
 on:
   workflow_call:
     inputs:
-      scan_path:
-        description: Repository-relative path to scan.
+      content_scan_path:
+        description: Repository-relative path for Semgrep, Trivy, Checkov, and OSV-Scanner. Gitleaks intentionally scans the full Git history.
         required: false
         type: string
         default: .
@@ -43,6 +43,7 @@ env:
   SEMGREP_VERSION: '1.177.0'
   CHECKOV_VERSION: '3.3.17'
   OSV_SCANNER_VERSION: 'v2.5.1'
+  TRIVY_VERSION: 'v0.70.0'
   GITLEAKS_IMAGE: 'ghcr.io/gitleaks/gitleaks:v8.30.1@sha256:c00b6bd0aeb3071cbcb79009cb16a60dd9e0a7c60e2be9ab65d25e6bc8abbb7f'
 
 jobs:
@@ -56,7 +57,7 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
-      - name: Scan Git history
+      - name: Scan full Git history
         shell: bash
         run: |
           set -euo pipefail
@@ -78,13 +79,12 @@ jobs:
         uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
         with:
           python-version: '3.13'
-          cache: pip
       - name: Install pinned Semgrep
         run: python -m pip install --disable-pip-version-check "semgrep==${SEMGREP_VERSION}"
       - name: Scan and emit SARIF
         shell: bash
         env:
-          SCAN_PATH: ${{ inputs.scan_path }}
+          SCAN_PATH: ${{ inputs.content_scan_path }}
           SEMGREP_CONFIG: ${{ inputs.semgrep_config }}
         run: |
           set +e
@@ -130,8 +130,9 @@ jobs:
       - name: Trivy SARIF scan
         uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
         with:
+          version: ${{ env.TRIVY_VERSION }}
           scan-type: fs
-          scan-ref: ${{ inputs.scan_path }}
+          scan-ref: ${{ inputs.content_scan_path }}
           scanners: vuln,secret,misconfig
           severity: ${{ inputs.trivy_severity }}
           ignore-unfixed: true
@@ -147,8 +148,9 @@ jobs:
       - name: Enforce Trivy gate
         uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
         with:
+          version: ${{ env.TRIVY_VERSION }}
           scan-type: fs
-          scan-ref: ${{ inputs.scan_path }}
+          scan-ref: ${{ inputs.content_scan_path }}
           scanners: vuln,secret,misconfig
           severity: ${{ inputs.trivy_severity }}
           ignore-unfixed: true
@@ -158,8 +160,9 @@ jobs:
         if: ${{ always() && inputs.generate_sbom }}
         uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
         with:
+          version: ${{ env.TRIVY_VERSION }}
           scan-type: fs
-          scan-ref: ${{ inputs.scan_path }}
+          scan-ref: ${{ inputs.content_scan_path }}
           format: cyclonedx
           output: security-results/sbom.cdx.json
           exit-code: '0'
@@ -185,13 +188,12 @@ jobs:
         uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
         with:
           python-version: '3.13'
-          cache: pip
       - name: Install pinned Checkov
         run: python -m pip install --disable-pip-version-check "checkov==${CHECKOV_VERSION}"
       - name: Scan IaC and emit SARIF
         shell: bash
         env:
-          SCAN_PATH: ${{ inputs.scan_path }}
+          SCAN_PATH: ${{ inputs.content_scan_path }}
         run: |
           set +e
           mkdir -p security-results
@@ -233,5 +235,5 @@ jobs:
         run: go install "github.com/google/osv-scanner/v2/cmd/osv-scanner@${OSV_SCANNER_VERSION}"
       - name: Scan dependency manifests and lockfiles
         env:
-          SCAN_PATH: ${{ inputs.scan_path }}
+          SCAN_PATH: ${{ inputs.content_scan_path }}
         run: osv-scanner scan source -r "$SCAN_PATH"

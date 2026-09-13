@@ -13,7 +13,7 @@ on:
         type: boolean
         default: false
       rules_file:
-        description: ZAP rules file in the caller repository.
+        description: Repository-relative ZAP rules file in the caller repository.
         required: false
         type: string
         default: .zap/rules.tsv
@@ -25,6 +25,9 @@ concurrency:
   group: zap-baseline-${{ github.repository }}
   cancel-in-progress: false
 
+env:
+  ZAP_IMAGE: 'zaproxy/zap-stable:2.17.0@sha256:781a2bdaea47324e7bab583e2263f21d257b0aee61ed51521a5be45f5f5081ef'
+
 jobs:
   baseline:
     name: DAST / OWASP ZAP Baseline
@@ -35,15 +38,20 @@ jobs:
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           persist-credentials: false
-      - name: Validate authorized staging target
+      - name: Validate target, pin DNS, and prepare ZAP workspace
+        id: target
         shell: bash
         env:
           TARGET: ${{ inputs.target_url }}
           ALLOW_HTTP: ${{ inputs.allow_http }}
+          RULES_FILE: ${{ inputs.rules_file }}
         run: |
+          set -euo pipefail
           python - <<'PY'
           import ipaddress
           import os
+          import pathlib
+          import shutil
           import socket
           import urllib.parse
 
@@ -55,25 +63,93 @@ jobs:
               raise SystemExit('target_url must be an explicit authorized staging URL with an allowed scheme')
           if parsed.username or parsed.password:
               raise SystemExit('Do not embed credentials in target_url')
+          if parsed.fragment:
+              raise SystemExit('Fragments are not allowed in target_url')
+
           host = parsed.hostname
           if host.lower() == 'localhost':
               raise SystemExit('localhost targets are not allowed')
+
+          port = parsed.port or (443 if parsed.scheme == 'https' else 80)
           try:
-              addresses = {item[4][0] for item in socket.getaddrinfo(host, parsed.port or 443)}
+              resolved = {item[4][0] for item in socket.getaddrinfo(host, port, type=socket.SOCK_STREAM)}
           except socket.gaierror as exc:
               raise SystemExit(f'Unable to resolve target host: {exc}')
-          for raw in addresses:
+          if not resolved:
+              raise SystemExit('Target host resolved to no addresses')
+
+          public = []
+          for raw in sorted(resolved):
               ip = ipaddress.ip_address(raw)
-              if any((ip.is_private, ip.is_loopback, ip.is_link_local, ip.is_multicast, ip.is_reserved, ip.is_unspecified)):
+              forbidden = any((
+                  ip.is_private,
+                  ip.is_loopback,
+                  ip.is_link_local,
+                  ip.is_multicast,
+                  ip.is_reserved,
+                  ip.is_unspecified,
+              ))
+              if forbidden:
                   raise SystemExit(f'Private or reserved target address is not allowed: {ip}')
-          print(f'Authorized public staging target: {parsed.scheme}://{parsed.netloc}')
+              public.append(ip)
+
+          # Pin a vetted IPv4 address into the container to close the DNS-rebinding TOCTOU gap.
+          public_v4 = [ip for ip in public if ip.version == 4]
+          if not public_v4:
+              raise SystemExit('This baseline currently requires at least one public IPv4 address for DNS pinning')
+          pinned = public_v4[0]
+
+          workspace = pathlib.Path(os.environ['GITHUB_WORKSPACE']).resolve()
+          rules_rel = pathlib.Path(os.environ['RULES_FILE'])
+          if rules_rel.is_absolute() or '..' in rules_rel.parts:
+              raise SystemExit('rules_file must be a repository-relative path without parent traversal')
+          rules = (workspace / rules_rel).resolve()
+          try:
+              rules.relative_to(workspace)
+          except ValueError:
+              raise SystemExit('rules_file escapes the repository workspace')
+          if not rules.is_file():
+              raise SystemExit(f'ZAP rules file not found: {rules_rel}')
+
+          zap_work = workspace / 'zap-work'
+          if zap_work.exists():
+              shutil.rmtree(zap_work)
+          zap_work.mkdir()
+          zap_work.chmod(0o777)
+          shutil.copy2(rules, zap_work / 'rules.tsv')
+
+          output = pathlib.Path(os.environ['GITHUB_OUTPUT'])
+          with output.open('a', encoding='utf-8') as fh:
+              fh.write(f'target_host={host}\n')
+              fh.write(f'target_ip={pinned}\n')
+
+          print(f'Authorized target host {host} pinned to vetted public address {pinned}')
           PY
-      - name: OWASP ZAP baseline scan
-        uses: zaproxy/action-baseline@de8ad967d3548d44ef623df22cf95c3b0baf8b25 # v0.15.0
+      - name: OWASP ZAP passive baseline scan
+        shell: bash
+        env:
+          TARGET: ${{ inputs.target_url }}
+          TARGET_HOST: ${{ steps.target.outputs.target_host }}
+          TARGET_IP: ${{ steps.target.outputs.target_ip }}
+        run: |
+          set -euo pipefail
+          docker run --rm \
+            --add-host "$TARGET_HOST:$TARGET_IP" \
+            -v "$PWD/zap-work:/zap/wrk:rw" \
+            "$ZAP_IMAGE" \
+            zap-baseline.py \
+              -t "$TARGET" \
+              -c /zap/wrk/rules.tsv \
+              -a \
+              -I \
+              -T 10 \
+              -r zap-report.html \
+              -J zap-report.json
+      - name: Upload ZAP reports
+        if: ${{ always() && hashFiles('zap-work/zap-report.*') != '' }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          target: ${{ inputs.target_url }}
-          rules_file_name: ${{ inputs.rules_file }}
-          fail_action: true
-          allow_issue_writing: false
-          artifact_name: zap-baseline-report
-          cmd_options: -a
+          name: zap-baseline-report-${{ github.run_id }}
+          path: zap-work/zap-report.*
+          if-no-files-found: warn
+          retention-days: 30
