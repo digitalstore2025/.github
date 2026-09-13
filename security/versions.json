@@ -14,7 +14,11 @@
   },
   "gitleaks": {
     "version": "v8.30.1",
+    "source_commit": "83d9cd684c87d95d656c1458ef04895a7f1cbd8e",
     "container_manifest_digest": "sha256:c00b6bd0aeb3071cbcb79009cb16a60dd9e0a7c60e2be9ab65d25e6bc8abbb7f"
+  },
+  "trivy": {
+    "version": "v0.70.0"
   },
   "trivy_action": {
     "version": "v0.36.0",
@@ -40,8 +44,10 @@
     "version": "v4",
     "commit": "b96794f015dfd88f77b49b1c93e0fa7110f94c63"
   },
-  "zap_baseline_action": {
-    "version": "v0.15.0",
-    "commit": "de8ad967d3548d44ef623df22cf95c3b0baf8b25"
-  }
+  "zap": {
+    "version": "2.17.0",
+    "image": "zaproxy/zap-stable:2.17.0",
+    "manifest_digest": "sha256:781a2bdaea47324e7bab583e2263f21d257b0aee61ed51521a5be45f5f5081ef"
+  },
+  "reusable_workflow_baseline_commit": "5b577b1078c9f1f8bd368d0cbaabd84f84c5d59c"
 }

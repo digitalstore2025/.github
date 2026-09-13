@@ -13,7 +13,9 @@ security/zap/rules.tsv                    -> .zap/rules.tsv
 security/templates/renovate.json          -> renovate.json
 ```
 
-The reusable workflows live in `digitalstore2025/.github` and are called from each application repository.
+The reusable workflows live in `digitalstore2025/.github`. The supplied caller templates intentionally pin them to an audited commit SHA rather than mutable `main`. Treat a baseline-SHA update as a normal reviewed dependency change.
+
+`content_scan_path` scopes Semgrep, Trivy, Checkov, and OSV-Scanner. Gitleaks intentionally scans the complete Git history because a secret elsewhere in history remains an exposure even when application code lives in a subdirectory.
 
 ## 2. Start in observation mode
 
@@ -26,7 +28,7 @@ Recommended progression:
 3. Semgrep: require ERROR/WARNING after rules are tuned to the codebase.
 4. Checkov: require when IaC exists; no blanket suppressions.
 5. OSV-Scanner: require after lockfiles/manifests are deterministic.
-6. CodeQL: require for supported languages where GitHub code scanning is enabled.
+6. CodeQL: require for supported languages where GitHub code scanning is enabled. Set `build_mode` per language; use `autobuild` where compilation is required and supported.
 7. ZAP: run against an explicitly authorized staging target after deployment.
 
 ## 3. AI-generated code gate
@@ -39,7 +41,9 @@ See `AI-CODE-REVIEW.md`.
 
 The consumer workflow is manual by default. Provide the staging URL as the dispatch input. Do not point the baseline at production unless there is an explicit testing authorization and an approved test window.
 
-The reusable workflow rejects localhost, private, link-local, multicast, reserved and unspecified targets. It also rejects credentials embedded in the URL.
+The reusable workflow rejects localhost, private, link-local, multicast, reserved and unspecified target addresses, URL credentials, fragments, and rules-file traversal. It resolves the target before scanning and pins one vetted public IPv4 address into the ZAP container with Docker `--add-host` so a second DNS resolution cannot rebind the authorized hostname to a private address.
+
+The ZAP image itself is pinned by manifest digest. The workflow currently requires the target to expose at least one public IPv4 address so DNS pinning stays deterministic.
 
 ## 5. Enable Renovate deliberately
 

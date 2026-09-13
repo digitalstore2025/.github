@@ -12,7 +12,7 @@ A reusable security baseline for repositories where developers and AI coding age
 | Pull request | Checkov | IaC and cloud configuration policy |
 | Pull request | OSV-Scanner | Dependency vulnerability matching |
 | Pull request / schedule | CodeQL | Deeper semantic and data-flow analysis |
-| Staging only | OWASP ZAP | Runtime baseline DAST |
+| Staging only | OWASP ZAP | Passive runtime baseline DAST |
 | Continuous | Renovate | Controlled dependency and GitHub Action updates |
 
 ## Architecture
@@ -54,10 +54,14 @@ Use the caller templates under `security/templates/` in each application reposit
 ## Security design choices
 
 - Third-party GitHub Actions are pinned to exact commit SHAs.
-- Semgrep and Checkov are installed at explicit versions.
+- Consumer templates pin the central reusable workflow to an audited commit SHA instead of mutable `main`.
+- Semgrep, Checkov, Trivy, OSV-Scanner, and Gitleaks are pinned to explicit versions/digests.
+- Gitleaks scans the full Git history intentionally, even when the other scanners are scoped to a subdirectory.
 - Gitleaks runs as the open-source CLI container, avoiding the organization-license requirement of `gitleaks-action`.
-- ZAP is intentionally staging-only and rejects localhost/private/reserved targets.
-- The ZAP baseline workflow is passive by default; active scanning is not part of this baseline.
+- CodeQL accepts a per-language `none`/`autobuild` matrix instead of forcing `build-mode: none` on every language. Repositories requiring a manual build should own a custom CodeQL workflow.
+- ZAP uses a digest-pinned stable container and pins the target hostname to a previously vetted public IPv4 address inside the container, closing the validate-then-resolve DNS-rebinding gap.
+- ZAP is intentionally staging-only in this baseline and rejects localhost/private/reserved targets, embedded credentials, and unsafe rules-file paths.
+- The ZAP baseline is passive; active scanning is not part of this baseline.
 - SARIF upload is optional because GitHub code scanning availability depends on repository/account configuration.
 - SBOM generation uses CycloneDX and is retained as a workflow artifact.
 
