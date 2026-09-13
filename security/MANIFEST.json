@@ -1,0 +1,68 @@
+{
+  "files": [
+    {
+      "path": ".github/workflows/codeql-reusable.yml",
+      "sha256": "5f47817b12072b9dede6a986f30b7efea2d45eb4a38fd84e8e7275ba1ce2b296"
+    },
+    {
+      "path": ".github/workflows/security-gate.yml",
+      "sha256": "2c6128b212d21a54a4f803ecde42e48df52418649e21832561459dc65fc1dbb8"
+    },
+    {
+      "path": ".github/workflows/zap-baseline-reusable.yml",
+      "sha256": "836ed24a63d8cb8e2350957994ccc53820738ff7ce8600b94e27baf28a42e667"
+    },
+    {
+      "path": "security/ADOPTION.md",
+      "sha256": "afe5e46536b6a0df2069aaa8d99eba196b924b9f4b1f1ab0619ef0df08e7a5ea"
+    },
+    {
+      "path": "security/AI-CODE-REVIEW.md",
+      "sha256": "45176cb0da4b82009d28447df81ece8a81051b7178d847bd7d1434b062e1e2d0"
+    },
+    {
+      "path": "security/README.md",
+      "sha256": "6b72194691cca4eb88d22d97edc752a7b5bc6a7ffd6685b9afba31b4d5bdf56c"
+    },
+    {
+      "path": "security/SECURITY-GATES.md",
+      "sha256": "0fcad97df2db7a51096ab139cd411b200a99bd84bcd7fd05e68d4c0a1ba257dc"
+    },
+    {
+      "path": "security/THREAT-MODEL.md",
+      "sha256": "3d4f8f811e18b9510b9219fb329cc3a72092e5e29a9bb91f09cdd5adc062f42b"
+    },
+    {
+      "path": "security/scripts/security-local.sh",
+      "sha256": "eded70df1ed3490d082c8083fc2653f1dcc25310f27f78e07888984386b9959a"
+    },
+    {
+      "path": "security/templates/consumer-codeql.yml",
+      "sha256": "00ee97a6bf9c881284ab2aa7706fd152f078d4f83927424e299380005143f2e7"
+    },
+    {
+      "path": "security/templates/consumer-security.yml",
+      "sha256": "d011daa301c7a0898b0dab95cdf0127a16d7c3e2d03ff91316d255e6e1339e4f"
+    },
+    {
+      "path": "security/templates/consumer-zap.yml",
+      "sha256": "12a148a0f4482d50bdd72d2c756ab1409711a6242719e5abaa531c2a839532a1"
+    },
+    {
+      "path": "security/templates/pre-commit-config.yaml",
+      "sha256": "7119399c9a531c4a9f61a4194cad8ac680e5c27eb4fdcebf4f1b9a6390ecab66"
+    },
+    {
+      "path": "security/templates/renovate.json",
+      "sha256": "14417f966fc0eed0d9c6d653636e60f9f3489f1a451444237f06ea80e677c226"
+    },
+    {
+      "path": "security/versions.json",
+      "sha256": "b9dd52899c74e6288084084c41dd0db7d33be4f627653b307fc3af18f5491060"
+    },
+    {
+      "path": "security/zap/rules.tsv",
+      "sha256": "088c66ad24a7e7bc0fd3b434f2899928094a618c3b2793387d90d207f93a10c7"
+    }
+  ]
+}

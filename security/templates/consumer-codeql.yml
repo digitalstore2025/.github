@@ -1,0 +1,21 @@
+name: CodeQL
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  schedule:
+    - cron: '41 2 * * 3'
+
+permissions:
+  contents: read
+  security-events: write
+  packages: read
+
+jobs:
+  codeql:
+    uses: digitalstore2025/.github/.github/workflows/codeql-reusable.yml@main
+    with:
+      languages_json: '["javascript-typescript","python"]'
+      queries: security-extended

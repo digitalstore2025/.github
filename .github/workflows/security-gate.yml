@@ -1,0 +1,237 @@
+name: Reusable Security Gate
+
+on:
+  workflow_call:
+    inputs:
+      scan_path:
+        description: Repository-relative path to scan.
+        required: false
+        type: string
+        default: .
+      semgrep_config:
+        description: Semgrep registry/config selector.
+        required: false
+        type: string
+        default: auto
+      trivy_severity:
+        description: Comma-separated severities that fail the Trivy gate.
+        required: false
+        type: string
+        default: HIGH,CRITICAL
+      upload_sarif:
+        description: Upload SARIF to GitHub code scanning when supported.
+        required: false
+        type: boolean
+        default: true
+      generate_sbom:
+        description: Generate and retain a CycloneDX SBOM artifact.
+        required: false
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+
+concurrency:
+  group: security-gate-${{ github.repository }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+  SEMGREP_VERSION: '1.177.0'
+  CHECKOV_VERSION: '3.3.17'
+  OSV_SCANNER_VERSION: 'v2.5.1'
+  GITLEAKS_IMAGE: 'ghcr.io/gitleaks/gitleaks:v8.30.1@sha256:c00b6bd0aeb3071cbcb79009cb16a60dd9e0a7c60e2be9ab65d25e6bc8abbb7f'
+
+jobs:
+  gitleaks:
+    name: Secrets / Gitleaks CLI
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout full history
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Scan Git history
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker run --rm \
+            -v "$PWD:/repo" \
+            "$GITLEAKS_IMAGE" \
+            git --redact=100 --exit-code 1 /repo
+
+  semgrep:
+    name: SAST / Semgrep
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - name: Setup Python
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.13'
+          cache: pip
+      - name: Install pinned Semgrep
+        run: python -m pip install --disable-pip-version-check "semgrep==${SEMGREP_VERSION}"
+      - name: Scan and emit SARIF
+        shell: bash
+        env:
+          SCAN_PATH: ${{ inputs.scan_path }}
+          SEMGREP_CONFIG: ${{ inputs.semgrep_config }}
+        run: |
+          set +e
+          mkdir -p security-results
+          semgrep scan \
+            --config "$SEMGREP_CONFIG" \
+            --error \
+            --severity ERROR \
+            --severity WARNING \
+            --sarif \
+            --output security-results/semgrep.sarif \
+            "$SCAN_PATH"
+          code=$?
+          printf '%s\n' "$code" > security-results/semgrep.exit
+          exit 0
+      - name: Upload Semgrep SARIF
+        if: ${{ always() && inputs.upload_sarif && hashFiles('security-results/semgrep.sarif') != '' }}
+        uses: github/codeql-action/upload-sarif@b96794f015dfd88f77b49b1c93e0fa7110f94c63 # v4
+        with:
+          sarif_file: security-results/semgrep.sarif
+          category: semgrep
+      - name: Enforce Semgrep gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          code="$(cat security-results/semgrep.exit)"
+          if [ "$code" -ne 0 ]; then
+            echo "Semgrep gate failed with exit code $code"
+            exit "$code"
+          fi
+
+  trivy:
+    name: SCA + Secrets + Misconfig / Trivy
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - name: Prepare results
+        run: mkdir -p security-results
+      - name: Trivy SARIF scan
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+        with:
+          scan-type: fs
+          scan-ref: ${{ inputs.scan_path }}
+          scanners: vuln,secret,misconfig
+          severity: ${{ inputs.trivy_severity }}
+          ignore-unfixed: true
+          format: sarif
+          output: security-results/trivy.sarif
+          exit-code: '0'
+      - name: Upload Trivy SARIF
+        if: ${{ always() && inputs.upload_sarif && hashFiles('security-results/trivy.sarif') != '' }}
+        uses: github/codeql-action/upload-sarif@b96794f015dfd88f77b49b1c93e0fa7110f94c63 # v4
+        with:
+          sarif_file: security-results/trivy.sarif
+          category: trivy
+      - name: Enforce Trivy gate
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+        with:
+          scan-type: fs
+          scan-ref: ${{ inputs.scan_path }}
+          scanners: vuln,secret,misconfig
+          severity: ${{ inputs.trivy_severity }}
+          ignore-unfixed: true
+          format: table
+          exit-code: '1'
+      - name: Generate CycloneDX SBOM
+        if: ${{ always() && inputs.generate_sbom }}
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+        with:
+          scan-type: fs
+          scan-ref: ${{ inputs.scan_path }}
+          format: cyclonedx
+          output: security-results/sbom.cdx.json
+          exit-code: '0'
+      - name: Upload SBOM artifact
+        if: ${{ always() && inputs.generate_sbom && hashFiles('security-results/sbom.cdx.json') != '' }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: security-sbom-${{ github.run_id }}
+          path: security-results/sbom.cdx.json
+          if-no-files-found: error
+          retention-days: 30
+
+  checkov:
+    name: IaC / Checkov
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - name: Setup Python
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.13'
+          cache: pip
+      - name: Install pinned Checkov
+        run: python -m pip install --disable-pip-version-check "checkov==${CHECKOV_VERSION}"
+      - name: Scan IaC and emit SARIF
+        shell: bash
+        env:
+          SCAN_PATH: ${{ inputs.scan_path }}
+        run: |
+          set +e
+          mkdir -p security-results
+          checkov -d "$SCAN_PATH" --quiet --compact -o sarif > security-results/checkov.sarif
+          code=$?
+          printf '%s\n' "$code" > security-results/checkov.exit
+          exit 0
+      - name: Upload Checkov SARIF
+        if: ${{ always() && inputs.upload_sarif && hashFiles('security-results/checkov.sarif') != '' }}
+        uses: github/codeql-action/upload-sarif@b96794f015dfd88f77b49b1c93e0fa7110f94c63 # v4
+        with:
+          sarif_file: security-results/checkov.sarif
+          category: checkov
+      - name: Enforce Checkov gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          code="$(cat security-results/checkov.exit)"
+          if [ "$code" -ne 0 ]; then
+            echo "Checkov IaC gate failed with exit code $code"
+            exit "$code"
+          fi
+
+  osv:
+    name: Dependency CVEs / OSV-Scanner
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - name: Setup Go
+        uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
+        with:
+          go-version: '1.26.x'
+          cache: false
+      - name: Install pinned OSV-Scanner
+        run: go install "github.com/google/osv-scanner/v2/cmd/osv-scanner@${OSV_SCANNER_VERSION}"
+      - name: Scan dependency manifests and lockfiles
+        env:
+          SCAN_PATH: ${{ inputs.scan_path }}
+        run: osv-scanner scan source -r "$SCAN_PATH"

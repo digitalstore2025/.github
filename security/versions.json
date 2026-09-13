@@ -1,0 +1,47 @@
+{
+  "generated_at": "2026-09-14",
+  "semgrep": {
+    "version": "1.177.0",
+    "source": "PyPI"
+  },
+  "checkov": {
+    "version": "3.3.17",
+    "source": "PyPI"
+  },
+  "osv_scanner": {
+    "version": "v2.5.1",
+    "source": "GitHub"
+  },
+  "gitleaks": {
+    "version": "v8.30.1",
+    "container_manifest_digest": "sha256:c00b6bd0aeb3071cbcb79009cb16a60dd9e0a7c60e2be9ab65d25e6bc8abbb7f"
+  },
+  "trivy_action": {
+    "version": "v0.36.0",
+    "commit": "ed142fd0673e97e23eac54620cfb913e5ce36c25"
+  },
+  "checkout_action": {
+    "version": "v6",
+    "commit": "d23441a48e516b6c34aea4fa41551a30e30af803"
+  },
+  "setup_python_action": {
+    "version": "v6",
+    "commit": "ece7cb06caefa5fff74198d8649806c4678c61a1"
+  },
+  "setup_go_action": {
+    "version": "v6",
+    "commit": "924ae3a1cded613372ab5595356fb5720e22ba16"
+  },
+  "upload_artifact_action": {
+    "version": "v4",
+    "commit": "ea165f8d65b6e75b540449e92b4886f43607fa02"
+  },
+  "codeql_action": {
+    "version": "v4",
+    "commit": "b96794f015dfd88f77b49b1c93e0fa7110f94c63"
+  },
+  "zap_baseline_action": {
+    "version": "v0.15.0",
+    "commit": "de8ad967d3548d44ef623df22cf95c3b0baf8b25"
+  }
+}

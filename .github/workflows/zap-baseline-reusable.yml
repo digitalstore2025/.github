@@ -1,0 +1,79 @@
+name: Reusable ZAP Baseline
+
+on:
+  workflow_call:
+    inputs:
+      target_url:
+        description: Explicitly authorized staging URL to scan.
+        required: true
+        type: string
+      allow_http:
+        description: Allow plain HTTP. Keep false unless the staging environment requires it.
+        required: false
+        type: boolean
+        default: false
+      rules_file:
+        description: ZAP rules file in the caller repository.
+        required: false
+        type: string
+        default: .zap/rules.tsv
+
+permissions:
+  contents: read
+
+concurrency:
+  group: zap-baseline-${{ github.repository }}
+  cancel-in-progress: false
+
+jobs:
+  baseline:
+    name: DAST / OWASP ZAP Baseline
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - name: Validate authorized staging target
+        shell: bash
+        env:
+          TARGET: ${{ inputs.target_url }}
+          ALLOW_HTTP: ${{ inputs.allow_http }}
+        run: |
+          python - <<'PY'
+          import ipaddress
+          import os
+          import socket
+          import urllib.parse
+
+          target = os.environ['TARGET'].strip()
+          allow_http = os.environ['ALLOW_HTTP'].lower() == 'true'
+          parsed = urllib.parse.urlparse(target)
+          allowed = {'https'} | ({'http'} if allow_http else set())
+          if parsed.scheme not in allowed or not parsed.hostname:
+              raise SystemExit('target_url must be an explicit authorized staging URL with an allowed scheme')
+          if parsed.username or parsed.password:
+              raise SystemExit('Do not embed credentials in target_url')
+          host = parsed.hostname
+          if host.lower() == 'localhost':
+              raise SystemExit('localhost targets are not allowed')
+          try:
+              addresses = {item[4][0] for item in socket.getaddrinfo(host, parsed.port or 443)}
+          except socket.gaierror as exc:
+              raise SystemExit(f'Unable to resolve target host: {exc}')
+          for raw in addresses:
+              ip = ipaddress.ip_address(raw)
+              if any((ip.is_private, ip.is_loopback, ip.is_link_local, ip.is_multicast, ip.is_reserved, ip.is_unspecified)):
+                  raise SystemExit(f'Private or reserved target address is not allowed: {ip}')
+          print(f'Authorized public staging target: {parsed.scheme}://{parsed.netloc}')
+          PY
+      - name: OWASP ZAP baseline scan
+        uses: zaproxy/action-baseline@de8ad967d3548d44ef623df22cf95c3b0baf8b25 # v0.15.0
+        with:
+          target: ${{ inputs.target_url }}
+          rules_file_name: ${{ inputs.rules_file }}
+          fail_action: true
+          allow_issue_writing: false
+          artifact_name: zap-baseline-report
+          cmd_options: -a

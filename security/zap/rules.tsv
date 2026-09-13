@@ -1,0 +1,8 @@
+# OWASP ZAP baseline rules. Format: RULE_ID<TAB>ACTION<TAB>COMMENT
+# Start strict. Change a rule to WARN/IGNORE only after evidence-based triage.
+10020	WARN	X-Frame-Options Header Scanner
+10021	WARN	X-Content-Type-Options Header Missing
+10038	WARN	Content Security Policy Header Not Set
+10049	WARN	Storable and Cacheable Content
+10063	WARN	Permissions Policy Header Not Set
+10096	WARN	Timestamp Disclosure
