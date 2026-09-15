@@ -2,7 +2,7 @@
   "files": [
     {
       "path": ".github/workflows/codeql-reusable.yml",
-      "sha256": "ff7fd82a9562d30c3dd22b1dc4ca38d769d16eda361e627c39832840ca9e9b8b"
+      "sha256": "271db576418b1982cfbf490a0905354618894da193a7ed6de1b6517096697c74"
     },
     {
       "path": ".github/workflows/security-baseline-self-test.yml",
