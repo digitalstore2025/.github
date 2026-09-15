@@ -2,23 +2,23 @@
   "files": [
     {
       "path": ".github/workflows/codeql-reusable.yml",
-      "sha256": "ff7fd82a9562d30c3dd22b1dc4ca38d769d16eda361e627c39832840ca9e9b8b"
+      "sha256": "271db576418b1982cfbf490a0905354618894da193a7ed6de1b6517096697c74"
     },
     {
       "path": ".github/workflows/security-baseline-self-test.yml",
-      "sha256": "460f21bf079507364a6181276d121b1a827f1cc8a10dec208b937d2c06e70e52"
+      "sha256": "a31d73b37f7e1594bd12d12c0fc9b95e8c763002506cfbf8bfd84568abaac4f2"
     },
     {
       "path": ".github/workflows/security-gate.yml",
-      "sha256": "d4894c46f13d353959e1a74427039daec5748e0f3bad82bb51f348b49fd1af04"
+      "sha256": "bb53c37cc52cb92e786281a36fcfac6cda854704f8521f19d49b4fca0237baf6"
     },
     {
       "path": ".github/workflows/zap-baseline-reusable.yml",
-      "sha256": "38e1f35018a4da01d4ff1a8499096169a716f3bab5299a20807943ff77315889"
+      "sha256": "41e2cd78d0665001611dae1e7b7bddc8b0dad7a4e4986fb1e6c7b29bb61d94db"
     },
     {
       "path": "security/ADOPTION.md",
-      "sha256": "1619c6b2806266439bb2232d81b4e9a36e1fc190cc4ac21c80e59175911064fc"
+      "sha256": "7b1145c3f9d867ecafeec5a348a96c9a7d23942b1cf905d17b190cef35e5d2d8"
     },
     {
       "path": "security/AI-CODE-REVIEW.md",
@@ -26,7 +26,7 @@
     },
     {
       "path": "security/README.md",
-      "sha256": "4836bfb9ff002c7591cb13309cdb728cf81366f4b2dd91210d072c18d9e07216"
+      "sha256": "c9fffc30be5b9765f595f2fa3320e5ab4e48b1627d8affbc749db06449523c7b"
     },
     {
       "path": "security/SECURITY-GATES.md",
@@ -38,27 +38,27 @@
     },
     {
       "path": "security/scripts/security-local.sh",
-      "sha256": "37a748508e98032dd1b7a1d9f58ea59e3fa8813872f546659d0321c1b43b819c"
+      "sha256": "8370791339f52557ccebc19ede0bc1535b0330374aa9e746b373418069168435"
     },
     {
       "path": "security/scripts/validate-baseline.py",
-      "sha256": "382fd3091556971566734462e39d9619e8acbece43390c2851f12c9f8e2190ca"
+      "sha256": "a66972cd2db54ee3306324993ddf0701102dc95fecffa2784cf3dad356150d67"
     },
     {
       "path": "security/templates/consumer-codeql.yml",
-      "sha256": "bf1d3dbb5a89e2f0c12e98a56d6d30fb358ea89881844693e3e9c4a9aa38dcfc"
+      "sha256": "9e06cbbbba94e761256823b7960a26c487f61112bfd2bdf5aeeb69aace4ed2c1"
     },
     {
       "path": "security/templates/consumer-security.yml",
-      "sha256": "a62a05c81ec92f3eaab7aac86b96f8e23d91bb6b7544cd2065d86b72ed65487c"
+      "sha256": "140392169c3afefa1a0dcdeb06e085a355d5fb4b9e5cb3452713e969d271e506"
     },
     {
       "path": "security/templates/consumer-zap.yml",
-      "sha256": "b408fda074ff33f6abfd128ac074973ee00c6aafcbe16407720b6efeb33ef8af"
+      "sha256": "c67da2c5eb953aec0d625017ba1c1612103adbaf1953f707f278a73d0771f622"
     },
     {
       "path": "security/templates/pre-commit-config.yaml",
-      "sha256": "1805b01dde5d01090e4d2151d1a92a0162f6524440afe95b9e0c89f8ec271496"
+      "sha256": "9f50cbe6c1b66f24024596ed3e5cc9d39ff4bd8214e7677324928e8d31160ef1"
     },
     {
       "path": "security/templates/renovate.json",
@@ -66,7 +66,7 @@
     },
     {
       "path": "security/versions.json",
-      "sha256": "498cc22b731813e5086b60992f85fde451703cb044c4aac11a8c74b1850f0a2d"
+      "sha256": "f6132f0753ee51f5ef6d07fc678251aca68ac7e87993f13f709aa3bf0ee8685c"
     },
     {
       "path": "security/zap/rules.tsv",
